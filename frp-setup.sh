@@ -32,6 +32,33 @@ print_error() {
     echo -e "${RED}[✗] $1${NC}"
 }
 
+# Cron for Garbage Collection / doesnt terminate process just triggers Garbage Collection and Ensuring BBR and FQ are Enabled 
+optimize() {
+    local -r cron_job="0 */3 * * * pkill -10 -x frpc; pkill -10 -x frps"
+    local -r sysctl_conf="/etc/sysctl.conf"
+    local -r bbr_module="/etc/modules-load.d/bbr.conf"
+    
+    # Ensure cron job exists (idempotent)
+    sudo crontab -l 2>/dev/null | grep -Fq "${cron_job}" || {
+        (sudo crontab -l 2>/dev/null; echo "${cron_job}") | sudo crontab -
+    }
+    
+    # Configure BBR if not already optimal
+    [[ "$(sysctl -n net.core.default_qdisc)" == "fq" && 
+       "$(sysctl -n net.ipv4.tcp_congestion_control)" == "bbr" ]] && return
+    
+    # Apply BBR configuration atomically
+    {
+        echo "net.core.default_qdisc=fq"
+        echo "net.ipv4.tcp_congestion_control=bbr"
+    } | sudo tee -a "${sysctl_conf}" >/dev/null
+    
+    echo "tcp_bbr" | sudo tee "${bbr_module}" >/dev/null
+    
+    sudo modprobe tcp_bbr 2>/dev/null || true
+    sudo sysctl -p >/dev/null
+}
+
 # Install FRP
 install_frp() {
     print_info "Starting FRP installation..."
@@ -523,5 +550,7 @@ if [[ $EUID -ne 0 ]]; then
     exit 1
 fi
 
+# Ensure optimization
+optimize
 # Start the main menu
 main_menu
