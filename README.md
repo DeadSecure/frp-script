@@ -1,5 +1,3 @@
-🌍 **Languages**: English | [فارسی](README-fa.md)
-
 # Easy FRP
 
 A comprehensive bash script that simplifies the installation, configuration, and management of [FRP (Fast Reverse Proxy)](https://github.com/fatedier/frp) - a high-performance reverse proxy application focused on NAT penetration.
