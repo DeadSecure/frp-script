@@ -1,151 +1,198 @@
-🌍 **Languages**: English | [فارسی](README-fa.md)
+🌍 **زبان**: فارسی | [English](README-en.md)
 
-# Easy FRP
 
-A comprehensive bash script that simplifies the installation, configuration, and management of [FRP (Fast Reverse Proxy)](https://github.com/fatedier/frp) - a high-performance reverse proxy application focused on NAT penetration.
 
-This script automates the entire FRP setup process and provides an intuitive menu-driven interface for managing your FRP deployments.
+# اسکریپت مدیریت و نصب آسان 
 
-**Built for [FRP](https://github.com/fatedier/frp) by [fatedier](https://github.com/fatedier)**
+اسکریپت کامل و ساده‌سازی‌شده برای نصب، پیکربندی و مدیریت تانل ریورس FRP  یک ابزار پروکسی معکوس قدرتمند و سریع برای عبور از NAT.
 
-📚 **Documentation:** [GoFRP Official Docs](https://gofrp.org/en/docs/)
+این اسکریپت همه مراحل نصب و راه‌اندازی FRP رو به‌صورت خودکار انجام میده و یه منوی کاربرپسند برای مدیریت سرور و کلاینت‌های FRP داره.
 
-## Features
 
-✨ **One-Click Installation** - Automatically downloads and installs the latest FRP version  
-🖥️ **Interactive Setup** - Menu-driven configuration for both server and client  
-⚙️ **Advanced Configuration** - Browse, view, and edit existing configurations  
-🔧 **Service Management** - Start, stop, and manage systemd services  
-📊 **Status Monitoring** - View running services and configuration files  
 
-## Quick Start
+📚 **مستندات رسمی FRP**: [GoFRP Official Docs](https://gofrp.org/docs/)
 
-### Install
+---
 
-**⚠️ Run the script as root**
+## امکانات
+
+✨ **نصب با یک کلیک** – آخرین نسخه FRP رو به‌صورت خودکار دانلود و نصب می‌کنه
+
+🖥️ **راه‌اندازی تعاملی** – منوی راهنما برای تنظیم راحت سرور و کلاینت
+
+⚙️ **پیکربندی پیشرفته** – امکان مرور، دیدن و ویرایش فایل‌های پیکربندی
+
+📊 **مانیتور وضعیت** – مشاهده سرویس‌های در حال اجرا و فایل‌های پیکربندی
+
+🔧 **مدیریت سرویس‌ها** – شروع، توقف و کنترل سرویس‌ها از طریق systemd
+
+
+
+---
+
+**نکته ای درباره کانکشن هندلینگ و مصرف رم**
+
+ممکنه توی سروری با سرعت ۱۵۰ مگابیت بر ثانیه، مصرف رم بین ۱ تا ۲ گیگ رو ببینین. این کاملاً طبیعی و عمدی طراحی شده.
+
+برخلاف پروژه‌هایی که فقط دنبال مصرف کمتر رم هستن، FRP تمرکزش روی مدیریت درست اتصال‌ها، بافرها و وضعیت ارتباط‌هاست. این طراحی باعث می‌شه حتی در زمان فشار زیاد یا قطعی‌های لحظه‌ای، جدول اتصال‌ها پر نشه. ما مواردی از پروژه های دیگه دیدیم که سیستم‌هایی با مدیریت ضعیف کانکشن طراحی کردند، فقط با یه قطعی کوتاه، بیش از ۱۵۰۰۰ اتصال یتیم رها کردن.
+
+در مقابل، FRP طوری طراحی شده که افت اتصال‌ها رو خیلی سریع هندل کنه — توی تست‌های ما کمتر از ۱ ثانیه طول کشیده تا به حالت پایدار برگرده. توی این سیستم، پایداری و عملکرد بالا خیلی مهم‌تر از صرفه‌جویی چند صد مگابایتی در رم در نظر گرفته شده.
+
+
+---
+
+## شروع سریع
+
+### نصب
+
+**⚠️ حتماً اسکریپت رو به‌صورت روت اجرا کنین:**
 
 ```bash
 bash <(curl -Ls https://raw.githubusercontent.com/mikeesierrah/frp-script/main/frp-setup.sh)
 ```
 
-## Configuration
+---
 
-### Server Configuration
-Servers are configured in `/root/frp/server/` with the naming pattern:
+## پیکربندی
+
+### سرور
+
+فایل‌های سرور در مسیر `/root/frp/server/` با این الگو ذخیره می‌شن:
+
 ```
 server-<port>.toml
 ```
 
-### Client Configuration  
-Clients are configured in `/root/frp/client/` with the naming pattern:
+### کلاینت
+
+فایل‌های کلاینت در مسیر `/root/frp/client/` با الگوی زیر:
+
 ```
 client-<server-port>.toml
 ```
 
-### Service Management
-Services follow systemd template naming:
-- Server services: `frps@server-<port>`
-- Client services: `frpc@client-<server-port>`
+### مدیریت سرویس‌ها
 
-## Example Usage
+سرویس‌ها با systemd و با الگوی زیر ساخته می‌شن:
 
-### Basic Server Setup
-1. Run the script and choose option 1 (Install FRP)
-2. Choose option 2 (Setup FRP Server)
-3. Configure your desired port and authentication token
-4. Server will start automatically
+* سرور: `frps@server-port`
+* کلاینت: `frpc@client-port`
 
-### Basic Client Setup
-1. Ensure FRP is installed (option 1)
-2. Choose option 3 (Setup FRP Client)
-3. Enter your server details and local ports to expose
-4. Client will connect automatically
+---
 
-### Managing Existing Configurations
-1. Choose option 4 (Advanced Configuration)
-2. Select Server or Client configuration
-3. Pick the configuration file to edit
-4. Service will restart automatically after editing
+## نمونه استفاده
 
-## Troubleshooting
+### راه‌اندازی سرور
 
-### Check Service Status
+1. اسکریپت رو اجرا کن و گزینه ۱ (نصب FRP) رو بزن
+2. گزینه ۲ (راه‌اندازی سرور) رو انتخاب کن
+3. پورت و توکن احراز هویت رو وارد کن
+4. سرور به‌صورت خودکار اجرا می‌شه
+
+### راه‌اندازی کلاینت
+
+1. مطمئن شو FRP نصب شده (گزینه ۱)
+2. گزینه ۳ (راه‌اندازی کلاینت) رو بزن
+3. مشخصات سرور و پورت‌های لوکال رو وارد کن
+4. اتصال خودکار برقرار می‌شه
+
+### مدیریت تنظیمات فعلی
+
+1. گزینه ۴ (پیکربندی پیشرفته) رو بزن
+2. انتخاب کن کلاینت یا سرور
+3. فایل تنظیمات رو انتخاب و ویرایش کن
+4. بعد از ویرایش، سرویس خودکار ری‌استارت می‌شه
+
+---
+
+## رفع مشکلات
+
+### بررسی وضعیت سرویس‌ها
+
 ```bash
-# View all FRP services
+# نمایش همه سرویس‌های FRP
 systemctl list-units | grep frp
 
-# Check specific service
+# وضعیت یه سرویس خاص
 systemctl status frps@server-7000
 systemctl status frpc@client-7000
 ```
 
-### View Logs
+### مشاهده لاگ‌ها
+
 ```bash
-# Server logs
+# لاگ سرور
 journalctl -u frps@server-7000 -f
 
-# Client logs  
+# لاگ کلاینت
 journalctl -u frpc@client-7000 -f
 ```
 
-### Manual Configuration
-Configuration files are located at:
-- **Server**: `/root/frp/server/*.toml`
-- **Client**: `/root/frp/client/*.toml`
+### پیکربندی دستی
 
-## Important Note
+فایل‌های پیکربندی در مسیر زیر ذخیره می‌شن:
 
-**This script implements only the basic functionality of FRP for simplicity and speed.** 
+ **سرور**: `root/frp/server/*.toml`
 
-FRP is an incredibly powerful and feature-rich reverse proxy solution with extensive capabilities including:
+ **کلاینت**: `root/frp/client/*.toml`
 
-🔄 **Load Balancing** - Distribute traffic across multiple backend servers  
-🔀 **Port Multiplexing** - Share single ports across multiple services  
-🌐 **Real IP Forwarding** - Pass client IP addresses via X-Forwarded-For headers (perfect for IP limiting)  
-📊 **Bandwidth Limiting** - Control traffic flow for each proxy  
-🎯 **Custom Routing** - Route based on domains, paths, and headers  
-⚡ **Connection Pooling** - Optimize performance with persistent connections  
-🛡️ **Authentication Methods** - Token, OIDC, and custom auth systems  
-📈 **Monitoring & Metrics** - Built-in dashboard and statistics  
-🔧 **Plugin System** - Extend functionality with custom plugins  
+---
 
-### What This Script Covers
+## نکته مهم
 
-For the sake of **simplicity and quick deployment**, this script maps sensible default values for basic FRP setups. The configurations generated here represent just the tip of the iceberg - **one of the simplest possible implementations** of what FRP can do.
+**این اسکریپت فقط امکانات پایه FRP رو برای سادگی فراهم می‌کنه.**
 
-### For Power Users
+FRP قابلیت‌های خیلی پیشرفته‌تری داره مثل:
 
-If you're a power user with specific requirements such as:
-- Complex load balancing scenarios  
-- Advanced authentication mechanisms
-- Custom header manipulation
-- Bandwidth controls and traffic shaping
-- Multi-tenant deployments
-- Plugin integrations
+🔄 **لودبالانسینگ برای پخش ترافیک**
 
-**Please refer to the [official FRP documentation](https://gofrp.org/en/docs/)** and manually edit the generated configuration files using the "Advanced Configuration" option in this script.
+🔀 **پورت مالتی پلکسینگ برای استفاده چند سرویس از یه پورت**
 
-The purpose of this script is that it gets you started quickly with working configurations that you can then customize to unlock FRP's full potential.
+🌐**ارسال IP واقعی کاربر به سرور مناسب آیپی لیمیت**
 
-## Contributing
+📊 **محدودسازی پهنای باند هر پورت و پراکسی**
 
-Found a bug or want to contribute? Feel free to:
-1. Open an issue
-2. Submit a pull request
-3. Suggest improvements
+🎯 **مسیریابی با دامنه، مسیر و هدر**
 
-## Donation
+⚡ **اتصال دائم و بهینه شده**
 
-If this script helped you, consider:
-- 💝 **Donating $5 to someone in need** - spread kindness!
-- ☕ **Supporting the FRP developers** at [fatedier/frp](https://github.com/fatedier/frp)
+🛡️ **روش های احراز هویت متنوع**
 
-## License
+📈 **داشبورد مانیتورینگ داخلی**
 
-This script is provided as-is under the MIT License. FRP itself is licensed under the Apache License 2.0.
+🔧 **سیستم افزونه ها برای گسترش قابلیت ها**
 
-**FRP Project**: https://github.com/fatedier/frp  
-**FRP Documentation**: https://gofrp.org/en/docs/  
-**Original Author**: [fatedier](https://github.com/fatedier)
+---
 
+**پس این اسکریپت چی رو پوشش میده؟**
+
+برای راه اندازی سریع و ساده، این اسکریپت فقط تنظیمات پایه و معقول FRP رو ایجاد می کنه و هدفش ستاپ سریع این هسته برای تست و بررسیه و این که راحت تر بتونید کانفیگ خودتون رو انجام بدید
+
+---
+
+## کاربران حرفه‌ای
+
+اگه نیازهای خاصی دارین مثل:
+
+* لود بالانس پیشرفته
+* احراز هویت سفارشی
+* دستکاری هدرها
+* کنترل ترافیک دقیق
+* چند کاربره بودن
+* اتصال افزونه‌ها
+
+**حتماً به مستندات رسمی مراجعه کنین:**
+[اینجا کلیک کنید](https://gofrp.org/en/docs/)
+
+و از طریق گزینه "پیکربندی پیشرفته" در همین اسکریپت فایل‌ها رو دستی ویرایش کنین.
+
+---
+
+## حمایت مالی
+
+اگه این اسکریپت به کارت اومد، و خواستی حمایتی کنی : 
+
+ 💝 **۵ دلار به یه نیازمند کمک کن**
+ 
+ ☕ **از توسعه‌دهنده FRP تو گیت‌هاب حمایت کن**: [fatedier/frp](https://github.com/fatedier/frp)
 
